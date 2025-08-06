@@ -1,0 +1,133 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: "Staging model for order data"
+    columns:
+      - name: order_id
+        description: "Unique identifier for each order"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Identifier linking to customer information"
+        tests:
+          - not_null
+      - name: order_status
+        description: "Current status of the order"
+        tests:
+          - accepted_values:
+              values:
+                [
+                  "created",
+                  "approved",
+                  "invoiced",
+                  "processing",
+                  "shipped",
+                  "delivered",
+                  "canceled",
+                  "unavailable",
+                ]
+
+  - name: stg_customers
+    description: "Staging model for customer data"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_order_items
+    description: "Staging model for order line items"
+    columns:
+      - name: order_id
+        description: "Identifier linking to parent order"
+        tests:
+          - not_null
+      - name: product_id
+        description: "Identifier for purchased product"
+        tests:
+          - not_null
+      - name: seller_id
+        description: "Identifier for product seller"
+        tests:
+          - not_null
+
+  - name: stg_order_payments
+    description: "Staging model for order payments"
+    columns:
+      - name: order_id
+        description: "Identifier linking to parent order"
+        tests:
+          - not_null
+      - name: payment_type
+        description: "Payment method used"
+        tests:
+          - accepted_values:
+              values:
+                [
+                  "credit_card",
+                  "voucher",
+                  "debit_card",
+                  "boleto",
+                  "not_defined",
+                ]
+
+  - name: stg_order_reviews
+    description: "Staging model for order reviews"
+    columns:
+      - name: review_id
+        description: "Unique identifier for each review. there are same reviews for multiple orders. only the earliest reviews are kept and rest are ignored"
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "Identifier linking to reviewed order"
+        tests:
+          - not_null
+      - name: review_score
+        description: "Rating score from 1-5"
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+
+  - name: stg_products
+    description: "Staging model for product data"
+    columns:
+      - name: product_id
+        description: "Unique identifier for each product"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_product_categories
+    description: "Staging model for product category translations"
+    columns:
+      - name: product_category_name
+        description: "Category name in Portuguese"
+        tests:
+          - unique
+          - not_null
+      - name: product_category_name_english
+        description: "Category name in English"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_sellers
+    description: "Staging model for seller information"
+    columns:
+      - name: seller_id
+        description: "Unique identifier for each seller"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_geolocation
+    description: "Staging model for geographic data"
+    columns:
+      - name: geolocation_zip_code_prefix
+        description: "First 5 digits of geographic zip code"
+        tests:
+          - not_null
