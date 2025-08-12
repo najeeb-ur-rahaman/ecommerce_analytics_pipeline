@@ -1,6 +1,7 @@
 SELECT
     -- Order columns
     ord.order_id,
+    ord.customer_id,
     ord.order_status,
     ord.order_purchase_ts,
     ord.order_approved_at,
